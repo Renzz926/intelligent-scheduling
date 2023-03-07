@@ -2,6 +2,7 @@ import React, { useState, useLayoutEffect, useRef } from "react";
 // import { useMount } from "ahooks";
 import Card from "@/components/Card";
 import { getDprSize } from "@/utils/utils";
+import { formatTimeToDate } from "@/utils/format";
 import BarsChart from "@/components/Charts/BarsChart/index.jsx";
 import { Tab } from "@/components/Tab/Tab.jsx";
 import IconPitching from "@/assets/icon_pitching.png";
@@ -21,7 +22,28 @@ export default function HomePage() {
   const ws = useRef(null);
   const DeviceType = ["卸船机", "堆取料机", "皮带机"];
 
-  //启动
+  useLayoutEffect(() => {
+    setBarData([
+      { name: "#5-1", value: 500, color: "#59DDFA" },
+      { name: "#5-2", value: 600, color: "#B77153" },
+      { name: "#5-3", value: 700, color: "#B17BC5" },
+      { name: "#5-4", value: 800, color: "#FCAD7C" },
+      { name: "#5-5", value: 900, color: "#FD6643" },
+      { name: "#5-6", value: 1000, color: "#FD6643" },
+      { name: "#5-7", value: 1100, color: "#A3AD00" },
+      { name: "#5-8", value: 1200, color: "#A3AD00" },
+    ]);
+    setListData([
+      {a1:'1',a2:'混合粉',a3:'10.1',a4:'16.3',a5:'103',a6:'2023/3/7'},
+      {a1:'2',a2:'混合粉',a3:'12.1',a4:'19.3',a5:'63',a6:'2023/3/7'},
+      {a1:'3',a2:'混合粉',a3:'14.9',a4:'16.3',a5:'109',a6:'2023/3/7'},
+      {a1:'4',a2:'混合粉',a3:'16.8',a4:'17.3',a5:'145',a6:'2023/3/7'},
+      {a1:'5',a2:'混合粉',a3:'18.5',a4:'26.3',a5:'187',a6:'2023/3/7'},
+      {a1:'6',a2:'混合粉',a3:'20.3',a4:'19.3',a5:'101',a6:'2023/3/7'},
+      {a1:'7',a2:'混合粉',a3:'22.4',a4:'18.3',a5:'433',a6:'2023/3/7'},
+      {a1:'8',a2:'混合粉',a3:'26.5',a4:'23.3',a5:'93',a6:'2023/3/7'},
+    ])
+  }, []);
   useLayoutEffect(() => {
     ws.current = new WebSocket("ws://101.43.218.96:9999");
     ws.current.onopen = () => {
@@ -101,22 +123,26 @@ export default function HomePage() {
 
   const onChange = (v) => {
     setCurAc(v);
-    if (v === 0) {
-      setBarData([
-        // { name: "#5-1", value: 500, color: "#59DDFA" },
-        // { name: "#5-2", value: 600, color: "#B77153" },
-        // { name: "#5-3", value: 700, color: "#B17BC5" },
-        // { name: "#5-4", value: 800, color: "#FCAD7C" },
-        // { name: "#5-5", value: 900, color: "#FD6643" },
-        // { name: "#5-6", value: 1000, color: "#FD6643" },
-        // { name: "#5-7", value: 1100, color: "#A3AD00" },
-        // { name: "#5-8", value: 1200, color: "#A3AD00" },
-      ]);
-      setListData([]);
-    } else {
-      // setBarData([{ name: "#5-1", value: 500, color: "#59DDFA" }]);
-      setListData([]);
-    }
+    setBarData([
+      { name: "#5-1", value: 500, color: "#59DDFA" },
+      { name: "#5-2", value: 600, color: "#B77153" },
+      { name: "#5-3", value: 700, color: "#B17BC5" },
+      { name: "#5-4", value: 800, color: "#FCAD7C" },
+      { name: "#5-5", value: 900, color: "#FD6643" },
+      { name: "#5-6", value: 1000, color: "#FD6643" },
+      { name: "#5-7", value: 1100, color: "#A3AD00" },
+      { name: "#5-8", value: 1200, color: "#A3AD00" },
+    ]);
+    setListData([
+      {a1:'1',a2:'混合粉',a3:'10.1',a4:'16.3',a5:'103',a6:'2023/3/7'},
+      {a1:'2',a2:'混合粉',a3:'12.1',a4:'19.3',a5:'63',a6:'2023/3/7'},
+      {a1:'3',a2:'混合粉',a3:'14.9',a4:'16.3',a5:'109',a6:'2023/3/7'},
+      {a1:'4',a2:'混合粉',a3:'16.8',a4:'17.3',a5:'145',a6:'2023/3/7'},
+      {a1:'5',a2:'混合粉',a3:'18.5',a4:'26.3',a5:'187',a6:'2023/3/7'},
+      {a1:'6',a2:'混合粉',a3:'20.3',a4:'19.3',a5:'101',a6:'2023/3/7'},
+      {a1:'7',a2:'混合粉',a3:'22.4',a4:'18.3',a5:'433',a6:'2023/3/7'},
+      {a1:'8',a2:'混合粉',a3:'26.5',a4:'23.3',a5:'93',a6:'2023/3/7'},
+    ])
   };
   const cardContent = (data) => {
     return (
@@ -201,6 +227,7 @@ export default function HomePage() {
       title: "物料名称",
       dataIndex: "a2",
       key: "a2",
+      width:60
     },
     {
       title: "开始点",
@@ -221,6 +248,7 @@ export default function HomePage() {
       title: "进场时间",
       dataIndex: "a6",
       key: "a6",
+      width:70
     },
   ];
   return (
