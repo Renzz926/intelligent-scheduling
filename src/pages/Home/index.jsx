@@ -24,24 +24,24 @@ export default function HomePage() {
 
   useLayoutEffect(() => {
     setBarData([
-      { name: "#5-1", value: 500, color: "#59DDFA" },
-      { name: "#5-2", value: 600, color: "#B77153" },
-      { name: "#5-3", value: 700, color: "#B17BC5" },
-      { name: "#5-4", value: 800, color: "#FCAD7C" },
-      { name: "#5-5", value: 900, color: "#FD6643" },
+      { name: "#5-1", value: 510, color: "#59DDFA" },
+      { name: "#5-2", value: 1500, color: "#B77153" },
+      { name: "#5-3", value: 710, color: "#B17BC5" },
+      { name: "#5-4", value: 300, color: "#FCAD7C" },
+      { name: "#5-5", value: 550, color: "#FD6643" },
       { name: "#5-6", value: 1000, color: "#FD6643" },
       { name: "#5-7", value: 1100, color: "#A3AD00" },
-      { name: "#5-8", value: 1200, color: "#A3AD00" },
+      { name: "#5-8", value: 660, color: "#A3AD00" },
     ]);
     setListData([
-      {a1:'1',a2:'混合粉',a3:'10.1',a4:'16.3',a5:'103',a6:'2023/3/7'},
-      {a1:'2',a2:'混合粉',a3:'12.1',a4:'19.3',a5:'63',a6:'2023/3/7'},
-      {a1:'3',a2:'混合粉',a3:'14.9',a4:'16.3',a5:'109',a6:'2023/3/7'},
-      {a1:'4',a2:'混合粉',a3:'16.8',a4:'17.3',a5:'145',a6:'2023/3/7'},
-      {a1:'5',a2:'混合粉',a3:'18.5',a4:'26.3',a5:'187',a6:'2023/3/7'},
-      {a1:'6',a2:'混合粉',a3:'20.3',a4:'19.3',a5:'101',a6:'2023/3/7'},
-      {a1:'7',a2:'混合粉',a3:'22.4',a4:'18.3',a5:'433',a6:'2023/3/7'},
-      {a1:'8',a2:'混合粉',a3:'26.5',a4:'23.3',a5:'93',a6:'2023/3/7'},
+      {a1:'1',a2:'混合粉',a3:'10.1',a4:'16.3',a5:'103',a6:'2023/3/8'},
+      {a1:'2',a2:'混合粉',a3:'12.1',a4:'19.3',a5:'63',a6:'2023/3/8'},
+      {a1:'3',a2:'混合粉',a3:'14.9',a4:'16.3',a5:'109',a6:'2023/3/8'},
+      {a1:'4',a2:'混合粉',a3:'16.8',a4:'17.3',a5:'145',a6:'2023/3/8'},
+      {a1:'5',a2:'混合粉',a3:'18.5',a4:'26.3',a5:'187',a6:'2023/3/8'},
+      {a1:'6',a2:'混合粉',a3:'20.3',a4:'19.3',a5:'101',a6:'2023/3/8'},
+      {a1:'7',a2:'混合粉',a3:'22.4',a4:'18.3',a5:'433',a6:'2023/3/8'},
+      {a1:'8',a2:'混合粉',a3:'26.5',a4:'23.3',a5:'93',a6:'2023/3/8'},
     ])
   }, []);
   useLayoutEffect(() => {
@@ -123,16 +123,41 @@ export default function HomePage() {
 
   const onChange = (v) => {
     setCurAc(v);
-    setBarData([
-      { name: "#5-1", value: 500, color: "#59DDFA" },
-      { name: "#5-2", value: 600, color: "#B77153" },
-      { name: "#5-3", value: 700, color: "#B17BC5" },
-      { name: "#5-4", value: 800, color: "#FCAD7C" },
-      { name: "#5-5", value: 900, color: "#FD6643" },
-      { name: "#5-6", value: 1000, color: "#FD6643" },
-      { name: "#5-7", value: 1100, color: "#A3AD00" },
-      { name: "#5-8", value: 1200, color: "#A3AD00" },
-    ]);
+    if (v===0) {
+      setBarData([
+        { name: "#5-1", value: 510, color: "#59DDFA" },
+        { name: "#5-2", value: 1500, color: "#B77153" },
+        { name: "#5-3", value: 710, color: "#B17BC5" },
+        { name: "#5-4", value: 300, color: "#FCAD7C" },
+        { name: "#5-5", value: 550, color: "#FD6643" },
+        { name: "#5-6", value: 1000, color: "#FD6643" },
+        { name: "#5-7", value: 1100, color: "#A3AD00" },
+        { name: "#5-8", value: 660, color: "#A3AD00" },
+      ]);
+    }else if (v===1) {
+      setBarData([
+        { name: "#6-1", value: 1500, color: "#59DDFA" },
+        { name: "#6-2", value: 600, color: "#B77153" },
+        { name: "#6-3", value: 700, color: "#B17BC5" },
+        { name: "#6-4", value: 850, color: "#FCAD7C" },
+        { name: "#6-5", value: 900, color: "#FD6643" },
+        { name: "#6-6", value: 1600, color: "#FD6643" },
+        { name: "#6-7", value: 1100, color: "#A3AD00" },
+        { name: "#6-8", value: 360, color: "#A3AD00" },
+      ]);
+    }else{
+
+      setBarData([
+        { name: "#7-1", value: 550, color: "#59DDFA" },
+        { name: "#7-2", value: 440, color: "#B77153" },
+        { name: "#7-3", value: 700, color: "#B17BC5" },
+        { name: "#7-4", value: 1830, color: "#FCAD7C" },
+        { name: "#7-5", value: 900, color: "#FD6643" },
+        { name: "#7-6", value: 1000, color: "#FD6643" },
+        { name: "#7-7", value: 430, color: "#A3AD00" },
+        { name: "#7-8", value: 880, color: "#A3AD00" },
+      ]);
+    }
     setListData([
       {a1:'1',a2:'混合粉',a3:'10.1',a4:'16.3',a5:'103',a6:'2023/3/7'},
       {a1:'2',a2:'混合粉',a3:'12.1',a4:'19.3',a5:'63',a6:'2023/3/7'},
