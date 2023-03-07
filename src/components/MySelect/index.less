@@ -1,0 +1,25 @@
+.selectContainer {
+
+
+  :global {
+    // 需要改变的节点名,在此定义选择框的全局样式
+    //注意：option popup样式挂在body下面，在此定义无效
+
+  }
+
+}
+
+
+:global {
+  // 需要改变的节点名，在此定义下拉菜单的全局样式
+
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled){
+
+    background-color: rgb(61, 33, 139) ;
+    border: 1px solid rgb(21, 19, 20) ;
+   &> div{
+      color: rgb(199, 41, 128) ;
+
+    }
+  }
+}
