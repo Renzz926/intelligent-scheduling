@@ -564,6 +564,7 @@ export default function HomePage() {
                   position: "top",
                   color: "#fff",
                   fontSize: getDprSize(15),
+                  formatter: (parms) => Math.floor(Number(parms.value)),
                 },
               }}
             ></BarsChart>
