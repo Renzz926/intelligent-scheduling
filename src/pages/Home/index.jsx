@@ -16,8 +16,11 @@ export default function HomePage() {
   const [curAc, setCurAc] = useState(0);
   const [barData, setBarData] = useState([]);
   const [deviceData1, setdeviceData1] = useState({});
+  const [difval1, setdifval1] = useState([]);
   const [deviceData2, setdeviceData2] = useState({});
+  const [difval2, setdifval2] = useState([]);
   const [deviceData3, setdeviceData3] = useState({});
+  const [difval3, setdifval3] = useState([]);
   const [listData, setListData] = useState([]);
   const ws = useRef(null);
   const DeviceType = ["卸船机", "堆取料机", "皮带机"];
@@ -34,15 +37,71 @@ export default function HomePage() {
       { name: "#5-8", value: 660, color: "#A3AD00" },
     ]);
     setListData([
-      {a1:'1',a2:'混合粉',a3:'10.1',a4:'16.3',a5:'103',a6:'2023/3/8'},
-      {a1:'2',a2:'混合粉',a3:'12.1',a4:'19.3',a5:'63',a6:'2023/3/8'},
-      {a1:'3',a2:'混合粉',a3:'14.9',a4:'16.3',a5:'109',a6:'2023/3/8'},
-      {a1:'4',a2:'混合粉',a3:'16.8',a4:'17.3',a5:'145',a6:'2023/3/8'},
-      {a1:'5',a2:'混合粉',a3:'18.5',a4:'26.3',a5:'187',a6:'2023/3/8'},
-      {a1:'6',a2:'混合粉',a3:'20.3',a4:'19.3',a5:'101',a6:'2023/3/8'},
-      {a1:'7',a2:'混合粉',a3:'22.4',a4:'18.3',a5:'433',a6:'2023/3/8'},
-      {a1:'8',a2:'混合粉',a3:'26.5',a4:'23.3',a5:'93',a6:'2023/3/8'},
-    ])
+      {
+        a1: "1",
+        a2: "混合粉",
+        a3: "10.1",
+        a4: "16.3",
+        a5: "103",
+        a6: "2023/3/8",
+      },
+      {
+        a1: "2",
+        a2: "混合粉",
+        a3: "12.1",
+        a4: "19.3",
+        a5: "63",
+        a6: "2023/3/8",
+      },
+      {
+        a1: "3",
+        a2: "混合粉",
+        a3: "14.9",
+        a4: "16.3",
+        a5: "109",
+        a6: "2023/3/8",
+      },
+      {
+        a1: "4",
+        a2: "混合粉",
+        a3: "16.8",
+        a4: "17.3",
+        a5: "145",
+        a6: "2023/3/8",
+      },
+      {
+        a1: "5",
+        a2: "混合粉",
+        a3: "18.5",
+        a4: "26.3",
+        a5: "187",
+        a6: "2023/3/8",
+      },
+      {
+        a1: "6",
+        a2: "混合粉",
+        a3: "20.3",
+        a4: "19.3",
+        a5: "101",
+        a6: "2023/3/8",
+      },
+      {
+        a1: "7",
+        a2: "混合粉",
+        a3: "22.4",
+        a4: "18.3",
+        a5: "433",
+        a6: "2023/3/8",
+      },
+      {
+        a1: "8",
+        a2: "混合粉",
+        a3: "26.5",
+        a4: "23.3",
+        a5: "93",
+        a6: "2023/3/8",
+      },
+    ]);
   }, []);
   useLayoutEffect(() => {
     ws.current = new WebSocket("ws://101.43.218.96:9999");
@@ -84,6 +143,26 @@ export default function HomePage() {
         const device1 = deviceList[0];
         const device2 = deviceList[1];
         const device3 = deviceList[2];
+
+        setdifval1([
+          device1.Device0[0][40] - deviceData1.num1,
+          device1.Device0[0][41] - deviceData1.num2,
+          device1.Device0[0][42] - deviceData1.num3,
+          device1.Device0[0][43] - deviceData1.num4,
+        ]);
+        setdifval2([
+          device1.Device1[0][40] - deviceData2.num1,
+          device1.Device1[0][41] - deviceData2.num2,
+          device1.Device1[0][42] - deviceData2.num3,
+          device1.Device1[0][43] - deviceData2.num4,
+        ]);
+        setdifval3([
+          device2.Device2[0][40] - deviceData3.num1,
+          device1.Device2[0][41] - deviceData3.num2,
+          device1.Device2[0][42] - deviceData3.num3,
+          device1.Device2[0][43] - deviceData3.num4,
+        ]);
+
         setdeviceData1({
           num1: device1.Device0[0][40],
           num2: device1.Device0[0][41],
@@ -123,7 +202,7 @@ export default function HomePage() {
 
   const onChange = (v) => {
     setCurAc(v);
-    if (v===0) {
+    if (v === 0) {
       setBarData([
         { name: "#5-1", value: 510, color: "#59DDFA" },
         { name: "#5-2", value: 1500, color: "#B77153" },
@@ -134,7 +213,7 @@ export default function HomePage() {
         { name: "#5-7", value: 1100, color: "#A3AD00" },
         { name: "#5-8", value: 660, color: "#A3AD00" },
       ]);
-    }else if (v===1) {
+    } else if (v === 1) {
       setBarData([
         { name: "#6-1", value: 1500, color: "#59DDFA" },
         { name: "#6-2", value: 600, color: "#B77153" },
@@ -145,8 +224,7 @@ export default function HomePage() {
         { name: "#6-7", value: 1100, color: "#A3AD00" },
         { name: "#6-8", value: 360, color: "#A3AD00" },
       ]);
-    }else{
-
+    } else {
       setBarData([
         { name: "#7-1", value: 550, color: "#59DDFA" },
         { name: "#7-2", value: 440, color: "#B77153" },
@@ -159,17 +237,73 @@ export default function HomePage() {
       ]);
     }
     setListData([
-      {a1:'1',a2:'混合粉',a3:'10.1',a4:'16.3',a5:'103',a6:'2023/3/7'},
-      {a1:'2',a2:'混合粉',a3:'12.1',a4:'19.3',a5:'63',a6:'2023/3/7'},
-      {a1:'3',a2:'混合粉',a3:'14.9',a4:'16.3',a5:'109',a6:'2023/3/7'},
-      {a1:'4',a2:'混合粉',a3:'16.8',a4:'17.3',a5:'145',a6:'2023/3/7'},
-      {a1:'5',a2:'混合粉',a3:'18.5',a4:'26.3',a5:'187',a6:'2023/3/7'},
-      {a1:'6',a2:'混合粉',a3:'20.3',a4:'19.3',a5:'101',a6:'2023/3/7'},
-      {a1:'7',a2:'混合粉',a3:'22.4',a4:'18.3',a5:'433',a6:'2023/3/7'},
-      {a1:'8',a2:'混合粉',a3:'26.5',a4:'23.3',a5:'93',a6:'2023/3/7'},
-    ])
+      {
+        a1: "1",
+        a2: "混合粉",
+        a3: "10.1",
+        a4: "16.3",
+        a5: "103",
+        a6: "2023/3/7",
+      },
+      {
+        a1: "2",
+        a2: "混合粉",
+        a3: "12.1",
+        a4: "19.3",
+        a5: "63",
+        a6: "2023/3/7",
+      },
+      {
+        a1: "3",
+        a2: "混合粉",
+        a3: "14.9",
+        a4: "16.3",
+        a5: "109",
+        a6: "2023/3/7",
+      },
+      {
+        a1: "4",
+        a2: "混合粉",
+        a3: "16.8",
+        a4: "17.3",
+        a5: "145",
+        a6: "2023/3/7",
+      },
+      {
+        a1: "5",
+        a2: "混合粉",
+        a3: "18.5",
+        a4: "26.3",
+        a5: "187",
+        a6: "2023/3/7",
+      },
+      {
+        a1: "6",
+        a2: "混合粉",
+        a3: "20.3",
+        a4: "19.3",
+        a5: "101",
+        a6: "2023/3/7",
+      },
+      {
+        a1: "7",
+        a2: "混合粉",
+        a3: "22.4",
+        a4: "18.3",
+        a5: "433",
+        a6: "2023/3/7",
+      },
+      {
+        a1: "8",
+        a2: "混合粉",
+        a3: "26.5",
+        a4: "23.3",
+        a5: "93",
+        a6: "2023/3/7",
+      },
+    ]);
   };
-  const cardContent = (data) => {
+  const cardContent = (data, difData) => {
     return (
       <div className={styles.cardContent}>
         <div className={styles.top}>
@@ -179,7 +313,12 @@ export default function HomePage() {
             </div>
             <div className={styles.val}>
               <span>
-                <CountUp end={data.num1 || 0} decimals={1} duration={0.4} />
+                <CountUp
+                  start={difData[0]}
+                  end={data.num1 || 0}
+                  decimals={1}
+                  duration={0.4}
+                />
               </span>
               米
             </div>
@@ -191,7 +330,12 @@ export default function HomePage() {
             </div>
             <div className={styles.val}>
               <span>
-                <CountUp end={data.num2 || 0} decimals={1} duration={0.4} />
+                <CountUp
+                  start={difData[1]}
+                  end={data.num2 || 0}
+                  decimals={1}
+                  duration={0.4}
+                />
               </span>
               度
             </div>
@@ -203,7 +347,12 @@ export default function HomePage() {
             </div>
             <div className={styles.val}>
               <span>
-                <CountUp end={data.num3 || 0} decimals={1} duration={0.4} />
+                <CountUp
+                  start={difData[2]}
+                  end={data.num3 || 0}
+                  decimals={1}
+                  duration={0.4}
+                />
               </span>
               度
             </div>
@@ -225,7 +374,12 @@ export default function HomePage() {
           <div className={styles.item}>
             <div className={styles.tit}>| 作业量</div>
             <div className={styles.val}>
-              <CountUp end={data.num4 || 0} decimals={1} duration={0.4} />
+              <CountUp
+                start={difData[3]}
+                end={data.num4 || 0}
+                decimals={1}
+                duration={0.4}
+              />
             </div>
           </div>
         </div>
@@ -252,7 +406,7 @@ export default function HomePage() {
       title: "物料名称",
       dataIndex: "a2",
       key: "a2",
-      width:60
+      width: 60,
     },
     {
       title: "开始点",
@@ -273,7 +427,7 @@ export default function HomePage() {
       title: "进场时间",
       dataIndex: "a6",
       key: "a6",
-      width:70
+      width: 70,
     },
   ];
   return (
@@ -285,21 +439,21 @@ export default function HomePage() {
           bodyStyle={{ height: "1.9083rem" }}
           title="SR5"
         >
-          {cardContent(deviceData1)}
+          {cardContent(deviceData1, difval1)}
         </Card>
         <Card
           tagStatus="occupation"
           bodyStyle={{ height: "1.9083rem" }}
           title="SR6"
         >
-          {cardContent(deviceData2)}
+          {cardContent(deviceData2, difval2)}
         </Card>
         <Card
           tagStatus="leisure"
           bodyStyle={{ height: "1.9083rem" }}
           title="SR7"
         >
-          {cardContent(deviceData3)}
+          {cardContent(deviceData3, difval3)}
         </Card>
       </div>
       <div className={styles.bodyCenter}></div>
@@ -322,7 +476,11 @@ export default function HomePage() {
           <div className={styles.list}>
             <div className={styles.title}>料场储量</div>
             <div style={{ height: "1.1rem" }}>
-              <ScrollTable columns={columns} data={listData}></ScrollTable>
+              <ScrollTable
+                columns={columns}
+                rowKey="a1"
+                data={listData}
+              ></ScrollTable>
             </div>
           </div>
           <div className={styles.line}></div>
