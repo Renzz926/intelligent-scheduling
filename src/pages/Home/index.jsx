@@ -228,7 +228,7 @@ export default function HomePage() {
 
   useEffect(() => {
     updataListData();
-  }, []);
+  }, [list5.length]);
 
   const updateRightData = () => {
     if (curAc === 0) {
