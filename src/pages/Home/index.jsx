@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 // import { useMount } from "ahooks";
 import Card from "@/components/Card";
 import { getDprSize } from "@/utils/utils";
@@ -22,92 +22,31 @@ export default function HomePage() {
   const [deviceData3, setdeviceData3] = useState({});
   const [difval3, setdifval3] = useState([]);
   const [listData, setListData] = useState([]);
+  const [bar5, setbar5] = useState([]);
+  const [bar6, setbar6] = useState([]);
+  const [bar7, setbar7] = useState([]);
+  const [list5, setlist5] = useState([]);
+  const [list6, setlist6] = useState([]);
+  const [list7, setlist7] = useState([]);
   const ws = useRef(null);
   const DeviceType = ["卸船机", "堆取料机", "皮带机"];
+  let baseArr = [
+    { name: "-1", color: "#59DDFA" },
+    { name: "-2", color: "#B77153" },
+    { name: "-3", color: "#B17BC5" },
+    { name: "-4", color: "#FCAD7C" },
+    { name: "-5", color: "#FD6643" },
+    { name: "-6", color: "#FD6643" },
+    { name: "-7", color: "#A3AD00" },
+    { name: "-8", color: "#A3AD00" },
+  ];
 
-  useLayoutEffect(() => {
-    setBarData([
-      { name: "#5-1", value: 510, color: "#59DDFA" },
-      { name: "#5-2", value: 1500, color: "#B77153" },
-      { name: "#5-3", value: 710, color: "#B17BC5" },
-      { name: "#5-4", value: 300, color: "#FCAD7C" },
-      { name: "#5-5", value: 550, color: "#FD6643" },
-      { name: "#5-6", value: 1000, color: "#FD6643" },
-      { name: "#5-7", value: 1100, color: "#A3AD00" },
-      { name: "#5-8", value: 660, color: "#A3AD00" },
-    ]);
-    setListData([
-      {
-        a1: "1",
-        a2: "混合粉",
-        a3: "10.1",
-        a4: "16.3",
-        a5: "103",
-        a6: "2023/3/8",
-      },
-      {
-        a1: "2",
-        a2: "混合粉",
-        a3: "12.1",
-        a4: "19.3",
-        a5: "63",
-        a6: "2023/3/8",
-      },
-      {
-        a1: "3",
-        a2: "混合粉",
-        a3: "14.9",
-        a4: "16.3",
-        a5: "109",
-        a6: "2023/3/8",
-      },
-      {
-        a1: "4",
-        a2: "混合粉",
-        a3: "16.8",
-        a4: "17.3",
-        a5: "145",
-        a6: "2023/3/8",
-      },
-      {
-        a1: "5",
-        a2: "混合粉",
-        a3: "18.5",
-        a4: "26.3",
-        a5: "187",
-        a6: "2023/3/8",
-      },
-      {
-        a1: "6",
-        a2: "混合粉",
-        a3: "20.3",
-        a4: "19.3",
-        a5: "101",
-        a6: "2023/3/8",
-      },
-      {
-        a1: "7",
-        a2: "混合粉",
-        a3: "22.4",
-        a4: "18.3",
-        a5: "433",
-        a6: "2023/3/8",
-      },
-      {
-        a1: "8",
-        a2: "混合粉",
-        a3: "26.5",
-        a4: "23.3",
-        a5: "93",
-        a6: "2023/3/8",
-      },
-    ]);
-  }, []);
-  useLayoutEffect(() => {
+  useEffect(() => {
+    let timer = null;
     ws.current = new WebSocket("ws://101.43.218.96:9999");
     ws.current.onopen = () => {
       console.log("连接成功了");
-      setInterval(() => {
+      timer = setInterval(() => {
         ws?.current?.send(
           JSON.stringify({
             CmdType: 1,
@@ -120,12 +59,30 @@ export default function HomePage() {
                 Type: 0,
                 WriteNo: [{}],
               },
+            ],
+          })
+        );
+        ws?.current?.send(
+          JSON.stringify({
+            CmdType: 1,
+            User: "root",
+            UserType: 1,
+            deviceList: [
               {
                 DeviceName: "Device1",
                 DeviceType: 2,
                 Type: 0,
                 WriteNo: [{}],
               },
+            ],
+          })
+        );
+        ws?.current?.send(
+          JSON.stringify({
+            CmdType: 1,
+            User: "root",
+            UserType: 1,
+            deviceList: [
               {
                 DeviceName: "Device2",
                 DeviceType: 2,
@@ -135,173 +92,249 @@ export default function HomePage() {
             ],
           })
         );
-      }, 600);
+      }, 1000);
     };
     ws.current.onmessage = ({ data }) => {
       const { nStatu, deviceList } = JSON.parse(data);
       if (nStatu === 0) {
-        const device1 = deviceList[0];
-        const device2 = deviceList[1];
-        const device3 = deviceList[2];
-
-        setdifval1([
-          device1.Device0[0][40] - deviceData1.num1,
-          device1.Device0[0][41] - deviceData1.num2,
-          device1.Device0[0][42] - deviceData1.num3,
-          device1.Device0[0][43] - deviceData1.num4,
-        ]);
-        setdifval2([
-          device1.Device1[0][40] - deviceData2.num1,
-          device1.Device1[0][41] - deviceData2.num2,
-          device1.Device1[0][42] - deviceData2.num3,
-          device1.Device1[0][43] - deviceData2.num4,
-        ]);
-        setdifval3([
-          device2.Device2[0][40] - deviceData3.num1,
-          device1.Device2[0][41] - deviceData3.num2,
-          device1.Device2[0][42] - deviceData3.num3,
-          device1.Device2[0][43] - deviceData3.num4,
-        ]);
-
-        setdeviceData1({
-          num1: device1.Device0[0][40],
-          num2: device1.Device0[0][41],
-          num3: device1.Device0[0][42],
-          num4: device1.Device0[0][43],
-          type: 0,
-          name: "#5",
-          start: 10.2,
-          end: 15.8,
-        });
-        setdeviceData2({
-          num1: device2.Device1[0][40],
-          num2: device2.Device1[0][41],
-          num3: device2.Device1[0][42],
-          num4: device2.Device1[0][43],
-          type: 0,
-          name: "#6",
-          start: 14.2,
-          end: 18.8,
-        });
-        setdeviceData3({
-          num1: device3.Device2[0][40],
-          num2: device3.Device2[0][41],
-          num3: device3.Device2[0][42],
-          num4: device3.Device2[0][43],
-          type: 0,
-          name: "#7",
-          start: 16.2,
-          end: 20.8,
-        });
+        if (deviceList[0].Device0) {
+          const device1 = deviceList[0].Device0[0];
+          setbar5([
+            device1[44],
+            device1[45],
+            device1[46],
+            device1[47],
+            device1[48],
+            device1[49],
+            device1[50],
+            device1[51],
+          ]);
+          setlist5([
+            device1[52],
+            device1[53],
+            device1[54],
+            device1[55],
+            device1[56],
+            device1[57],
+            device1[58],
+            device1[59],
+          ]);
+          setdeviceData1({
+            num1: device1[40],
+            num2: device1[41],
+            num3: device1[42],
+            num4: device1[43],
+            type: 0,
+            name: "#5",
+            start: 10.2,
+            end: 15.8,
+          });
+          setdifval1([
+            device1[40] - deviceData1.num1,
+            device1[41] - deviceData1.num2,
+            device1[42] - deviceData1.num3,
+            device1[43] - deviceData1.num4,
+          ]);
+        }
+        if (deviceList[0].Device1) {
+          const device2 = deviceList[0].Device1[0];
+          setbar6([
+            device2[44],
+            device2[45],
+            device2[46],
+            device2[47],
+            device2[48],
+            device2[49],
+            device2[50],
+            device2[51],
+          ]);
+          setlist6([
+            device2[52],
+            device2[53],
+            device2[54],
+            device2[55],
+            device2[56],
+            device2[57],
+            device2[58],
+            device2[59],
+          ]);
+          setdeviceData2({
+            num1: device2[40],
+            num2: device2[41],
+            num3: device2[42],
+            num4: device2[43],
+            type: 0,
+            name: "#6",
+            start: 14.2,
+            end: 18.8,
+          });
+          setdifval2([
+            device2[40] - deviceData2.num1,
+            device2[41] - deviceData2.num2,
+            device2[42] - deviceData2.num3,
+            device2[43] - deviceData2.num4,
+          ]);
+        }
+        if (deviceList[0].Device2) {
+          const device3 = deviceList[0].Device2[0];
+          setbar7([
+            device3[44],
+            device3[45],
+            device3[46],
+            device3[47],
+            device3[48],
+            device3[49],
+            device3[50],
+            device3[51],
+          ]);
+          setlist7([
+            device3[52],
+            device3[53],
+            device3[54],
+            device3[55],
+            device3[56],
+            device3[57],
+            device3[58],
+            device3[59],
+          ]);
+          setdeviceData3({
+            num1: device3[40],
+            num2: device3[41],
+            num3: device3[42],
+            num4: device3[43],
+            type: 0,
+            name: "#7",
+            start: 16.2,
+            end: 20.8,
+          });
+          setdifval3([
+            device3[40] - deviceData3.num1,
+            device3[41] - deviceData3.num2,
+            device3[42] - deviceData3.num3,
+            device3[43] - deviceData3.num4,
+          ]);
+        }
       }
     };
     return () => {
-      ws.current?.close();
+      // ws.current?.close();
+      timer && clearInterval(timer);
     };
-  }, [ws]);
+  }, [ws, deviceData1, deviceData2, deviceData3]);
 
-  const onChange = (v) => {
-    setCurAc(v);
-    if (v === 0) {
-      setBarData([
-        { name: "#5-1", value: 510, color: "#59DDFA" },
-        { name: "#5-2", value: 1500, color: "#B77153" },
-        { name: "#5-3", value: 710, color: "#B17BC5" },
-        { name: "#5-4", value: 300, color: "#FCAD7C" },
-        { name: "#5-5", value: 550, color: "#FD6643" },
-        { name: "#5-6", value: 1000, color: "#FD6643" },
-        { name: "#5-7", value: 1100, color: "#A3AD00" },
-        { name: "#5-8", value: 660, color: "#A3AD00" },
-      ]);
-    } else if (v === 1) {
-      setBarData([
-        { name: "#6-1", value: 1500, color: "#59DDFA" },
-        { name: "#6-2", value: 600, color: "#B77153" },
-        { name: "#6-3", value: 700, color: "#B17BC5" },
-        { name: "#6-4", value: 850, color: "#FCAD7C" },
-        { name: "#6-5", value: 900, color: "#FD6643" },
-        { name: "#6-6", value: 1600, color: "#FD6643" },
-        { name: "#6-7", value: 1100, color: "#A3AD00" },
-        { name: "#6-8", value: 360, color: "#A3AD00" },
-      ]);
+  useEffect(() => {
+    updateRightData();
+  }, [curAc, bar5, bar6, bar7]);
+
+  useEffect(() => {
+    updataListData();
+  }, []);
+
+  const updateRightData = () => {
+    if (curAc === 0) {
+      setBarData(
+        bar5.map((item, i) => {
+          return {
+            name: `#5${baseArr[i].name}`,
+            value: item,
+            color: baseArr[i].color,
+          };
+        })
+      );
+    } else if (curAc === 1) {
+      setBarData(
+        bar6.map((item, i) => {
+          return {
+            name: `#6${baseArr[i].name}`,
+            value: item,
+            color: baseArr[i].color,
+          };
+        })
+      );
     } else {
-      setBarData([
-        { name: "#7-1", value: 550, color: "#59DDFA" },
-        { name: "#7-2", value: 440, color: "#B77153" },
-        { name: "#7-3", value: 700, color: "#B17BC5" },
-        { name: "#7-4", value: 1830, color: "#FCAD7C" },
-        { name: "#7-5", value: 900, color: "#FD6643" },
-        { name: "#7-6", value: 1000, color: "#FD6643" },
-        { name: "#7-7", value: 430, color: "#A3AD00" },
-        { name: "#7-8", value: 880, color: "#A3AD00" },
-      ]);
+      setBarData(
+        bar7.map((item, i) => {
+          return {
+            name: `#7${baseArr[i].name}`,
+            value: item,
+            color: baseArr[i].color,
+          };
+        })
+      );
     }
+  };
+
+  const updataListData = () => {
     setListData([
       {
         a1: "1",
         a2: "混合粉",
         a3: "10.1",
         a4: "16.3",
-        a5: "103",
-        a6: "2023/3/7",
+        a5: curAc === 0 ? list5[0] : curAc === 1 ? list6[0] : list7[0],
+        a6: formatTimeToDate(+new Date()),
       },
       {
         a1: "2",
         a2: "混合粉",
         a3: "12.1",
         a4: "19.3",
-        a5: "63",
-        a6: "2023/3/7",
+        a5: curAc === 0 ? list5[1] : curAc === 1 ? list6[1] : list7[1],
+        a6: formatTimeToDate(+new Date()),
       },
       {
         a1: "3",
         a2: "混合粉",
         a3: "14.9",
         a4: "16.3",
-        a5: "109",
-        a6: "2023/3/7",
+        a5: curAc === 0 ? list5[2] : curAc === 1 ? list6[2] : list7[2],
+        a6: formatTimeToDate(+new Date()),
       },
       {
         a1: "4",
         a2: "混合粉",
         a3: "16.8",
         a4: "17.3",
-        a5: "145",
-        a6: "2023/3/7",
+        a5: curAc === 0 ? list5[3] : curAc === 1 ? list6[3] : list7[3],
+        a6: formatTimeToDate(+new Date()),
       },
       {
         a1: "5",
         a2: "混合粉",
         a3: "18.5",
         a4: "26.3",
-        a5: "187",
-        a6: "2023/3/7",
+        a5: curAc === 0 ? list5[4] : curAc === 1 ? list6[4] : list7[4],
+        a6: formatTimeToDate(+new Date()),
       },
       {
         a1: "6",
         a2: "混合粉",
         a3: "20.3",
         a4: "19.3",
-        a5: "101",
-        a6: "2023/3/7",
+        a5: curAc === 0 ? list5[5] : curAc === 1 ? list6[5] : list7[5],
+        a6: formatTimeToDate(+new Date()),
       },
       {
         a1: "7",
         a2: "混合粉",
         a3: "22.4",
         a4: "18.3",
-        a5: "433",
-        a6: "2023/3/7",
+        a5: curAc === 0 ? list5[6] : curAc === 1 ? list6[6] : list7[6],
+        a6: formatTimeToDate(+new Date()),
       },
       {
         a1: "8",
         a2: "混合粉",
         a3: "26.5",
         a4: "23.3",
-        a5: "93",
-        a6: "2023/3/7",
+        a5: curAc === 0 ? list5[7] : curAc === 1 ? list6[7] : list7[7],
+        a6: formatTimeToDate(+new Date()),
       },
     ]);
+  };
+  const onChange = (v) => {
+    setCurAc(v);
+    updataListData();
   };
   const cardContent = (data, difData) => {
     return (
@@ -314,7 +347,7 @@ export default function HomePage() {
             <div className={styles.val}>
               <span>
                 <CountUp
-                  start={difData[0]}
+                  start={data.num1 - (difData[0] | 0)}
                   end={data.num1 || 0}
                   decimals={1}
                   duration={0.4}
@@ -331,7 +364,7 @@ export default function HomePage() {
             <div className={styles.val}>
               <span>
                 <CountUp
-                  start={difData[1]}
+                  start={data.num2 - (difData[1] | 0)}
                   end={data.num2 || 0}
                   decimals={1}
                   duration={0.4}
@@ -348,7 +381,7 @@ export default function HomePage() {
             <div className={styles.val}>
               <span>
                 <CountUp
-                  start={difData[2]}
+                  start={data.num3 - (difData[2] | 0)}
                   end={data.num3 || 0}
                   decimals={1}
                   duration={0.4}
@@ -375,7 +408,7 @@ export default function HomePage() {
             <div className={styles.tit}>| 作业量</div>
             <div className={styles.val}>
               <CountUp
-                start={difData[3]}
+                start={data.num4 - (difData[3] | 0)}
                 end={data.num4 || 0}
                 decimals={1}
                 duration={0.4}
@@ -401,33 +434,37 @@ export default function HomePage() {
       title: "料堆",
       dataIndex: "a1",
       key: "a1",
+      width: 40,
     },
     {
       title: "物料名称",
       dataIndex: "a2",
       key: "a2",
-      width: 60,
+      width: 50,
     },
     {
       title: "开始点",
       dataIndex: "a3",
       key: "a3",
+      width: 47,
     },
     {
       title: "结束点",
       dataIndex: "a4",
       key: "a4",
+      width: 47,
     },
     {
       title: "体积",
       dataIndex: "a5",
       key: "a5",
+      width: 40,
     },
     {
       title: "进场时间",
       dataIndex: "a6",
       key: "a6",
-      width: 70,
+      width: 90,
     },
   ];
   return (
