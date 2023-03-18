@@ -11,6 +11,7 @@ import IconCar from "@/assets/icon_car.png";
 import CountUp from "react-countup";
 import ScrollTable from "@/components/ScrollTable/ScrollTable.jsx";
 import styles from "./index.less";
+import { message } from "antd";
 
 export default function HomePage() {
   const [curAc, setCurAc] = useState(0);
@@ -28,7 +29,6 @@ export default function HomePage() {
   const [list5, setlist5] = useState([]);
   const [list6, setlist6] = useState([]);
   const [list7, setlist7] = useState([]);
-  const ws = useRef(null);
   const DeviceType = ["卸船机", "堆取料机", "皮带机"];
   let baseArr = [
     { name: "-1", color: "#59DDFA" },
@@ -41,13 +41,37 @@ export default function HomePage() {
     { name: "-8", color: "#A3AD00" },
   ];
 
-  useEffect(() => {
-    let timer = null;
-    ws.current = new WebSocket("ws://101.43.218.96:9999");
-    ws.current.onopen = () => {
-      console.log("连接成功了");
-      timer = setInterval(() => {
-        ws?.current?.send(
+  let timeoutObj = null;
+  let serverTimeoutObj = null;
+  let ws = null
+
+  const websocketclose = (e) => {
+    // 监听连接
+    console.log("断开连接", e);
+    countDown();
+    setTimeout(() => {
+      init();
+    }, 2000); // websocket关闭链接重连
+  };
+  const connectSocket = () => {
+    // 连接websocket
+    ws = new WebSocket("ws://101.43.218.96:9999");
+    // 监听连接失败
+    // ws.onerror = websocketclose;
+    // 监听连接关闭
+    ws.onclose = websocketclose;
+  };
+
+  const longstart = () => {
+    //1、通过关闭定时器和倒计时进行重置心跳
+    timeoutObj && clearInterval(timeoutObj);
+    serverTimeoutObj && clearTimeout(serverTimeoutObj);
+    // 2、每隔1s向后端发送一条商议好的数据
+    timeoutObj = setInterval(() => {
+      console.log("重置监测心跳");
+      console.log('ws.readyState',ws.readyState);
+      if (ws.readyState === 1) {
+        ws.send(
           JSON.stringify({
             CmdType: 1,
             User: "root",
@@ -62,7 +86,7 @@ export default function HomePage() {
             ],
           })
         );
-        ws?.current?.send(
+        ws.send(
           JSON.stringify({
             CmdType: 1,
             User: "root",
@@ -77,7 +101,7 @@ export default function HomePage() {
             ],
           })
         );
-        ws?.current?.send(
+        ws.send(
           JSON.stringify({
             CmdType: 1,
             User: "root",
@@ -92,9 +116,33 @@ export default function HomePage() {
             ],
           })
         );
-      }, 1000);
+      }
+      // 3、发送数据 2s后没有接收到返回的数据进行关闭websocket重连
+      serverTimeoutObj = setTimeout(() => {
+        console.log("后台挂掉，没有心跳了....");
+        console.log("打印websocket的地址:" + ws);
+        ws.close();
+      }, 2000);
+    }, 1000);
+  };
+
+  message.config({
+    top: 50,
+    duration: 0,
+    maxCount: 1,
+  });
+  const countDown = () => {
+    const hide = message.loading("正在尝试重新连接..", 0, () => {});
+    setTimeout(hide, 2000);
+  };
+  const init = () => {
+    connectSocket(); // 建立websocket连接
+    ws.onopen = () => {
+      console.log("连接成功了");
+      longstart();
     };
-    ws.current.onmessage = ({ data }) => {
+    ws.onmessage = ({ data }) => {
+      longstart();
       const { nStatu, deviceList } = JSON.parse(data);
       if (nStatu === 0) {
         if (deviceList[0].Device0) {
@@ -216,11 +264,10 @@ export default function HomePage() {
         }
       }
     };
-    return () => {
-      // ws.current?.close();
-      timer && clearInterval(timer);
-    };
-  }, [ws, deviceData1, deviceData2, deviceData3]);
+  };
+  useEffect(() => {
+    init();
+  }, [ws]);
 
   useEffect(() => {
     updateRightData();
