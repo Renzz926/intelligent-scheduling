@@ -43,12 +43,11 @@ export default function HomePage() {
 
   let timeoutObj = null;
   let serverTimeoutObj = null;
-  let ws = null
+  let ws = null;
 
   const websocketclose = (e) => {
     // 监听连接
     console.log("断开连接", e);
-    countDown();
     setTimeout(() => {
       init();
     }, 2000); // websocket关闭链接重连
@@ -57,7 +56,7 @@ export default function HomePage() {
     // 连接websocket
     ws = new WebSocket("ws://101.43.218.96:9999");
     // 监听连接失败
-    // ws.onerror = websocketclose;
+    ws.onerror = websocketclose;
     // 监听连接关闭
     ws.onclose = websocketclose;
   };
@@ -69,7 +68,6 @@ export default function HomePage() {
     // 2、每隔1s向后端发送一条商议好的数据
     timeoutObj = setInterval(() => {
       console.log("重置监测心跳");
-      console.log('ws.readyState',ws.readyState);
       if (ws.readyState === 1) {
         ws.send(
           JSON.stringify({
@@ -83,30 +81,12 @@ export default function HomePage() {
                 Type: 0,
                 WriteNo: [{}],
               },
-            ],
-          })
-        );
-        ws.send(
-          JSON.stringify({
-            CmdType: 1,
-            User: "root",
-            UserType: 1,
-            deviceList: [
               {
                 DeviceName: "Device1",
                 DeviceType: 2,
                 Type: 0,
                 WriteNo: [{}],
               },
-            ],
-          })
-        );
-        ws.send(
-          JSON.stringify({
-            CmdType: 1,
-            User: "root",
-            UserType: 1,
-            deviceList: [
               {
                 DeviceName: "Device2",
                 DeviceType: 2,
@@ -121,7 +101,8 @@ export default function HomePage() {
       serverTimeoutObj = setTimeout(() => {
         console.log("后台挂掉，没有心跳了....");
         console.log("打印websocket的地址:" + ws);
-        ws.close();
+        countDown();
+        // ws.close();
       }, 2000);
     }, 1000);
   };
@@ -184,8 +165,8 @@ export default function HomePage() {
             device1[43] - deviceData1.num4,
           ]);
         }
-        if (deviceList[0].Device1) {
-          const device2 = deviceList[0].Device1[0];
+        if (deviceList[1].Device1) {
+          const device2 = deviceList[1].Device1[0];
           setbar6([
             device2[44],
             device2[45],
@@ -223,8 +204,8 @@ export default function HomePage() {
             device2[43] - deviceData2.num4,
           ]);
         }
-        if (deviceList[0].Device2) {
-          const device3 = deviceList[0].Device2[0];
+        if (deviceList[2].Device2) {
+          const device3 = deviceList[2].Device2[0];
           setbar7([
             device3[44],
             device3[45],
